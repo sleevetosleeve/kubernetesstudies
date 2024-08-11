@@ -1,1 +1,3 @@
-# kubernetesstudies
+# Kubernetes Studies
+
+## Cluster Setup
