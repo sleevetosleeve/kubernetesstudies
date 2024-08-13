@@ -25,6 +25,8 @@ Kubernetes 1.30 actually has partial compatibility with systems using swap, and 
 
 It is also worth noting that windows machines can be used as worker nodes. This guide wil not be covering that however. See [Windows in Kubernetes](https://kubernetes.io/docs/concepts/windows/) fro more information. 
 
+See [Applience Template](appliancetemplate.md) for a guide on how to generate your own template file that you can use to quickly launce vms for your cluster.
+
 ## Naming
 
 Before we get to setting up the virtual machines, let us take a moment to discuss the naming on said nodes and cluster. In an enterprise environment you will probably have a couple of clusters names as `prod`, `staging`, `test` and so on. But in a study situation you will probably be using a few clusters to test various aspects of kubernetes. And you might end up calling them `test`, `test01`, `test02` and so on. But if we also take the names of the nodes into consideration the naming might go slightly overboard with names like `test1c1`, `test1w1`, `test2c1`, `test2c2` and `test2w1`. It might thus a good idea to avoid numbers in the primary name of the cluster. One god idea could be to call it according to what you are testing, like `ingress`, `metrics` or `servicemesh`. Alternatively something neutral like a color, planet or city.
@@ -43,3 +45,91 @@ A better solution would be to utilize a dns name that pointed to the control pla
 
 The benefit of this setup becomes apparent with slightly bigger clusters. Where we can utilize the extra abstraction level to increase availability.
 
+## Control Plane Node
+
+Once you have chosen a name for your cluster add `c1` or `cp01` or similar suffix to it to attain the name of the cluster's control plane node. We will be using the name `origo` for the cluster and `origoc1` for the control plane node. When you have chosen a name for the the control plane node, follow the steps in [Appliance Template - Launch](appliancetemplate.md#launch) to initialize it.
+
+Now using your favorite terminal ssh into the control plane node.
+
+```
+ssh vm_user_name@origoc1
+```
+You need to find out the ip of the vm. Execute the command:
+```
+ip -br a
+```
+You will need to find the ip in the output. In the below example output the ip address we are looking for is highted in orange.
+<pre>
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s3           UP             <span style="color:orange;font-weight:bold">192.168.1.46</span>/24 fd75:501:9bc1:0:a00:27ff:fe4a:741e/64 fe80::a00:27ff:fe4a:741e/64 
+</pre>
+Now that you have ip you can initialize the kubernetes cluster. Execute the initialization script:
+```
+kubernetesstudies/cluster_setup/init_k8s.sh
+```
+When asked for the cluster name and ip enter them. The script will take a while to run. When it is finished you can validate that the cluster is initialized by executing:
+```
+kubectl get nodes
+```
+Wich should output something like:
+```
+NAME      STATUS   ROLES           AGE    VERSION
+origoc1   Ready    control-plane   2d6h   v1.30.3
+```
+If the status is not ready, just wait a minute or two and run the command again.
+## Worker Node
+Just like the control plane node add a suffix like `w1`, `wo01` or similar to the cluster name to attain the worker name node. We will be using `origow1`. Launch the worker vm like you did for the control plane vm and log ssh into it.
+```
+ssh vm_user_name@origow1
+```
+Run the join script:
+```
+kubernetesstudies/cluster_setup/join_k8s.sh
+```
+When the script is done the command `kubectl get nodes` will return
+```
+NAME      STATUS   ROLES           AGE    VERSION
+origoc1   Ready    control-plane   2d7h   v1.30.3
+origow1   Ready    <none>          2d6h   v1.30.3
+```
+## Simple Test
+To do a simple test run a simple pod containing a web server:
+```
+kubectl run webtest --image=httpd
+```
+Check that it is running
+```
+kubectl get pods
+```
+You will se something like:
+```
+NAME      READY   STATUS    RESTARTS   AGE
+webtest   1/1     Running   0          39s
+```
+Now lets expose the pod
+```
+kubectl expose pod webtest --port=80 --type=NodePort
+```
+View the services to find out the NodePort that was opened:
+```
+kubectl get service
+```
+The port you are looking for is highlighted in orange:
+<pre>
+NAME         TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+kubernetes   ClusterIP   10.96.0.1     <none>        443/TCP        2d7h
+webtest      NodePort    10.104.45.3   <none>        80:<span style="color:orange;font-weight:bold">30261</span>/TCP   45s
+</pre>
+Run:
+```
+curl localhost:30261
+```
+You should get something like:
+```
+<html><body><h1>It works!</h1></body></html>
+```
+To cleanup after the test run
+```
+kubectl delete pod/webtest service/webtest
+```
+To end you study session logout of both ssh sessions by typing `exit` and pressing enter and right click the vms click "Stop" -> "Power Off".

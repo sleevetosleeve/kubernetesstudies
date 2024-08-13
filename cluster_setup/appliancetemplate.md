@@ -281,7 +281,35 @@ Now type `exit` and press enter to end the ssh session, and close the vm window 
 
 ![images/renameme055.png](images/renameme055.png)
 
-"Choose a disk file..."
+Now we will attach the Guest Additions iso to the vm. With the "renameme" vm selected, click "Settings".
+
+![images/renameme055-1.png](images/renameme055-1.png)
+
+Switch to the "Storage" tab
+
+![images/renameme055-2.png](images/renameme055-2.png)
+
+Select the empty Controller IDE, click the CD icon to the right of the dialog, click "Choose a disk file..." and navigate to and select the VBoxGuestAuditions iso file you downloaded in the preparations section.
+
+![images/renameme055-3.png](images/renameme055-3.png)
+
+Switch "Optical Drive:" to "IDE Primary Device 0" and click "OK".
+
+![images/renameme055-4.png](images/renameme055-4.png)
+
+Now, wth the "renameme" vm selected click "Start".
+
+![images/renameme055-4.png](images/renameme055-5.png)
+
+When the vm login window eventually comes up, just minimize it as before.
+
+![images/renameme054.png](images/renameme054.png)
+
+From your favorite terminal on your working station ssh into the "renameme" vm:
+
+```
+ssh <vm_user_name>@renameme
+```
 
 Mount Guest Additions CD
 ```
@@ -308,14 +336,31 @@ Add the vm user to the VBox sharing group
 ```
 sudo usermod -aG vboxsf <vm_user_name>
 ```
-```
-```
-```
-```
+Again type `exit` and press enter to end the ssh session, and close the vm window you minimized earlier by clicking the x in the corner. When the dialog pops up choose "Power off the machine" and click "OK".
 
-While on the main window, be sure the "renameme" vm is selected, and press Ctrl+E to open the "Export Virtual Appliance" dialog.
+![images/renameme055.png](images/renameme055.png)
 
-![images/renameme056.png](images/renameme007-5.png)
+Now we will share the `kubernetesstudies` folder of the workstation with the vm. With the "renameme" vm selected, click "Settings".
+
+![images/renameme055-1.png](images/renameme055-1.png)
+
+Switch to the "Shared Folders" tab and click the add folder icon to the right of the dialog.
+
+![images/renameme055-6.png](images/renameme055-6.png)
+
+When the dialog opens
+1) Enter the path to the `kubernetesstudies` folder on the host machine in "Folder Path".
+2) Enter `kubernetesstudies` in "Folder Name"
+3) Enter `/home/<vm_user_name>/kubernetesstudies" in "Mount Point"
+4) Be sure "Read Only" is not selected.
+5) Check "Auto-Mount" 
+6) Click "OK"
+
+![images/renameme055-7.png](images/renameme055-7.png)
+
+Now we will save the appliance. While on the main window, be sure the "renameme" vm is selected, and press Ctrl+E to open the "Export Virtual Appliance" dialog.
+
+![images/renameme056.png](images/renameme055-10.png)
 
 Select "renameme" and click "Next"
 
@@ -343,7 +388,7 @@ Click "Delete all Files"
 
 That is it! You have created your own Appliance Template file, that you can use to quickly launce vms.
 
----
+## Launch
 
 Now we will try to use the appliance file to make a fresh vm. In this example we will make a vm called **`origoc1`**, but you can use any name.
 
@@ -377,7 +422,7 @@ The new vm will load quickly
 
 Now select the new vm and click "Start"
 
-![renameme066-images/5.png](renameme066-images/5.png)
+![images/renameme066-5.png](images/renameme066-5.png)
 
 The vm's window will pop up. Login using the administrator credentials you used in the installation process.
 
