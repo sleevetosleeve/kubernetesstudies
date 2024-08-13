@@ -25,7 +25,7 @@ Kubernetes 1.30 actually has partial compatibility with systems using swap, and 
 
 It is also worth noting that windows machines can be used as worker nodes. This guide wil not be covering that however. See [Windows in Kubernetes](https://kubernetes.io/docs/concepts/windows/) fro more information. 
 
-See [Applience Template](appliancetemplate.md) for a guide on how to generate your own template file that you can use to quickly launce vms for your cluster.
+See [Applience Template](appliancetemplate.md) for a guide on how to generate your own template file that you can use to quickly launch vms for your cluster.
 
 ## Naming
 
