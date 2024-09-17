@@ -37,7 +37,7 @@ kubectl get configmap kube-proxy -n kube-system -o yaml | \
 sed -e "s/strictARP: false/strictARP: true/" | \
 kubectl apply -f - -n kube-system
 ```
-And as long as we are fiddling with kube-proxy we will use this opportunity to switch kube-proxy to the IPVS network mode. Without activating this mode kube-proxy falls back to using iptables, a much more inferior teleology for routing. And as we just installed the vms using modern operating systems. so we know they have IPVS functionality, so there is no reason not to use it. Activate IPVS using this command.
+And as long as we are fiddling with kube-proxy we will use this opportunity to switch kube-proxy to the IPVS network mode. Without activating this mode kube-proxy falls back to using iptables, a much more inferior teleology for routing. And as we just installed the vms using modern operating systems, we know they have IPVS functionality, so there is no reason not to use it. Activate IPVS using this command.
 ```
 kubectl get configmap kube-proxy -n kube-system -o yaml | \
 sed -e 's/mode:.*false/mode: "ipvs"/' | \
@@ -56,6 +56,10 @@ Navigate to [https://helm.sh/](https://helm.sh/) and install helm according to t
 Start by adding the MetalLB repository to your helm repositories:
 ```
 helm repo add metallb https://metallb.github.io/metallb
+```
+Update the hel repositories:
+```
+helm repo update
 ```
 Now we will install MetalLB into the namespace we made earlier:
 ```
@@ -76,7 +80,7 @@ spec:
   # uncomment a copy of the below line and replace "1.2.3.4" 
   # with the ip-address.
   # - 1.2.3.4/32
-  # For each range of ip-address you want to add to the pool,
+  # For each range of ip-addresses you want to add to the pool,
   # uncomment a copy of the below line and replace "5.6.7.8" 
   # with the start of the ip-range and "5.6.7.18" with the 
   # end of the ip-range.
