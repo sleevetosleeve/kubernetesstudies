@@ -27,7 +27,7 @@ metadata:
 ```
 The yaml file above initiates the namespace `metallb-system` and gives it elevated privileges as this is required ny MetalLB to interact with the node's network configuration. This file is in this folder and can be applied using this command:
 ```
-kubectl apply -f ../metallb-system-namespace.yaml
+kubectl apply -f metallb-system-namespace.yaml
 ```
 ## kube-proxy
 
