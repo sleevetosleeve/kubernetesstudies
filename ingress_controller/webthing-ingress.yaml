@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webthing-ingress
+spec:
+  ingressClassName: nginx
+  # tls:
+  # - hosts:
+  #   - webthing.io
+  #   secretName: webthing-io-tls
+  rules:
+  - host: "webthing.io"
+    http:
+      paths:
+        - pathType: Prefix
+          path: "/"
+          backend:
+            service:
+              name: webthing-service
+              port:
+                number: 80
