@@ -6,4 +6,6 @@
 
 3) [Load Balancer](loadbalancer/README.md)
 
-4) [INgress Controller](ingress_controller/README.md)
+4) [Ingress Controller](ingress_controller/README.md)
+
+5) [Network Policies](network_policies/README.md)
