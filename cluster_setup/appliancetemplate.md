@@ -247,7 +247,7 @@ Now that the folder is in place, we will move the public key in place. You will 
 
 Windows host machine:
 ```
-scp X:\Path\to\public\key\file.pub <vm_user_name>@renameme:/home/<vm_user_name>/.ssh/authorized_keys
+cat X:\Path\to\public\key\file.pub | ssh <vm_user_name>@renameme tee -a /home/<vm_user_name>/.ssh/authorized_keys
 ```
 
 Linux host machine:
