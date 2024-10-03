@@ -380,7 +380,7 @@ Give it time to save...
 
 When the appliance is saved we can remove the vm. Right click the "renameme" vm and choose "Remove..."
 
-![images/renameme056.png](renameme007-images/6.png)
+![images/renameme056.png](images/renameme007-6.png)
 
 Click "Delete all Files"
 
