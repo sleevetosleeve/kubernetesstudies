@@ -1,0 +1,4 @@
+kured:
+  configuration:
+    period: 0h5m0s
+    rebootSentinel: "/var/run/reboot-required"
